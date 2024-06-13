@@ -1,0 +1,52 @@
+menu "Keyboard configuration"
+        config KB_DEV_GPIO_A0_PIN
+            int "HC138 A0 Pin GPIO number"
+            default 8 if IDF_TARGET_ESP32S3
+            default 8
+
+        config KB_DEV_GPIO_A1_PIN
+            int "HC138 A1 Pin GPIO number"
+            default 9 if IDF_TARGET_ESP32S3
+            default 9
+
+        config KB_DEV_GPIO_A2_PIN
+            int "HC138 A2 Pin GPIO number"
+            default 11 if IDF_TARGET_ESP32S3
+            default 11
+
+        config KB_DEV_GPIO_SCAN_Y0_PIN
+            int "Keyboard scan Y0 GPIO number"
+            default 13 if IDF_TARGET_ESP32S3
+            default 13
+
+        config KB_DEV_GPIO_SCAN_Y1_PIN
+            int "Keyboard scan Y1 GPIO number"
+            default 15 if IDF_TARGET_ESP32S3
+            default 15
+
+        config KB_DEV_GPIO_SCAN_Y2_PIN
+            int "Keyboard scan Y2 GPIO number"
+            default 3 if IDF_TARGET_ESP32S3
+            default 3
+
+        config KB_DEV_GPIO_SCAN_Y3_PIN
+            int "Keyboard scan Y3 GPIO number"
+            default 4 if IDF_TARGET_ESP32S3
+            default 4
+
+        config KB_DEV_GPIO_SCAN_Y4_PIN
+            int "Keyboard scan Y4 GPIO number"
+            default 5 if IDF_TARGET_ESP32S3
+            default 5
+
+        config KB_DEV_GPIO_SCAN_Y5_PIN
+            int "Keyboard scan Y5 GPIO number"
+            default 6 if IDF_TARGET_ESP32S3
+            default 6
+
+        config KB_DEV_GPIO_SCAN_Y6_PIN
+            int "Keyboard scan Y6 GPIO number"
+            default 7 if IDF_TARGET_ESP32S3
+            default 7
+
+endmenu
