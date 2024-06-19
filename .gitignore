@@ -33,5 +33,8 @@
 
 # Build generator.
 build/
+.vscode/
 sdkconfig
 sdkconfig.*
+dependencies.lock
+managed_components/
