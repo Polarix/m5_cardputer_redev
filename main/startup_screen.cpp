@@ -2,8 +2,6 @@
 #include <esp_err.h>
 #include <esp_log.h>
 
-#include "wifi_list_screen.h"
-
 static void startup_timer_callback(lv_timer_t* timer);
 static void on_screen_unloaded(lv_event_t* event);
 
@@ -13,6 +11,7 @@ LV_FONT_DECLARE(BASIC_ASCII);
 static lv_obj_t* screen_handle = nullptr;
 static lv_obj_t* demo_label = nullptr;
 static const char* TAG = {"startup_scr"};
+static int s_timer_trigger_times = 0;
 
 void startup_screen_create(void)
 {
@@ -33,6 +32,7 @@ void startup_screen_create(void)
         lv_obj_set_style_text_opa(demo_label, LV_OPA_100, LV_STATE_DEFAULT);
 #endif
     }
+    s_timer_trigger_times = 0;
 }
 
 void startup_screen_load(void)
@@ -40,6 +40,7 @@ void startup_screen_load(void)
     if(screen_handle)
     {
         assert(lv_timer_create(startup_timer_callback, 1000, nullptr));
+        // lv_timer_set_repeat_count(timer, -1);
         ESP_LOGW(TAG, "Start timer.");
         lv_scr_load(screen_handle);
     }
@@ -59,11 +60,11 @@ static void startup_timer_callback(lv_timer_t* timer)
 {
     if(timer)
     {
-        lv_timer_del(timer);
-        ESP_LOGW(TAG, "Timer triggered.");
+        // lv_timer_del(timer);
+        // ESP_LOGW(TAG, "Timer triggered(%d).", s_timer_trigger_times++);
         if(demo_label)
         {
-            lv_obj_set_pos(demo_label, 5, 5);
+            lv_obj_set_pos(demo_label, 50, 5);
         }
         // wifi_list_screen_create();
         // wifi_list_screen_load();
