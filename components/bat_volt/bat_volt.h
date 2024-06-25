@@ -11,6 +11,7 @@ extern "C" {
 void bat_volt_monitor_init(void);
 void bat_volt_monitor_deinit(void);
 int bat_volt_read_mv(void);
+int bat_volt_read_power_persent(int bat_volt_mv);
 
 #ifdef __cplusplus
 }

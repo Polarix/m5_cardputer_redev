@@ -19,6 +19,12 @@ static void bat_volt_adc_calibration_deinit(adc_cali_handle_t handle);
 static adc_oneshot_unit_handle_t s_bat_adc_handle = NULL;
 static adc_cali_handle_t s_bat_adc_cali_handle = NULL;
 static adc_channel_t s_bat_adc_channel;
+static const int s_bat_volt_remaining[] = 
+    {5000, 4200, 4080, 4000, 3930, 3870, 3820, 3790, 3770, 3730, 3680, 3640};
+//  {3640, 3680, 3730, 3770, 3790, 3820, 3870, 3930, 4000, 4080, 4200, 5000};
+static const int s_bat_power_remaining[] = 
+    {150, 100,  90,   80,   70,   60,   50,   40,   30,   20,   10,  0};
+//  {0  ,  10,   20,   30,   40,   50,   60,   70,   80,   90,  100, 150};
 
 void bat_volt_monitor_init(void)
 {
@@ -61,12 +67,27 @@ int bat_volt_read_mv(void)
     // ESP_LOGI(TAG, "ADC%d Channel[%d] Raw Data: %d", ADC_UNIT_1 + 1, EXAMPLE_ADC1_CHAN0, bat_adc_raw);
     ESP_ERROR_CHECK(adc_cali_raw_to_voltage(s_bat_adc_cali_handle, bat_adc_raw, &bat_volt_val));
     // ESP_LOGI(TAG, "ADC%d Channel[%d] Cali Voltage: %d mV", ADC_UNIT_1 + 1, EXAMPLE_ADC1_CHAN0, bat_volt_val);
-    return bat_volt_val;
+    return (bat_volt_val << 1);
 }
 
-/*---------------------------------------------------------------
-        ADC Calibration
----------------------------------------------------------------*/
+int bat_volt_read_power_persent(int bat_volt_mv)
+{
+    int remaining_persent = s_bat_power_remaining[0];
+    for(size_t i=0; i < (sizeof(s_bat_volt_remaining)/sizeof(s_bat_volt_remaining[0])); ++i)
+    {
+        if(bat_volt_mv > s_bat_volt_remaining[i])
+        {
+            remaining_persent = s_bat_power_remaining[i];
+            break;
+        }
+    }
+    if(remaining_persent > 100)
+    {
+        remaining_persent = 100;
+    }
+    return remaining_persent;
+}
+
 static bool bat_volt_adc_calibration_init(adc_unit_t unit, adc_channel_t channel, adc_atten_t atten, adc_cali_handle_t *out_handle)
 {
     adc_cali_handle_t handle = NULL;
