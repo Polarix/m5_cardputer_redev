@@ -65,6 +65,7 @@ static uint8_t keypad_read_col(uint8_t col)
 #endif
 void keypad_init(void)
 {
+    keypad_init_event_queue();
     keypad_init_gpio();
     keypad_write_row(0);
 }
@@ -142,7 +143,8 @@ static void keypad_event_update(void)
         {
             /* Key code s_key_state_previous.pressed_code[release_chk_idx] is not exist in last state, released. */
             /* Key released. */
-            ESP_LOGW(TAG, "Key %d, released.", s_key_state_previous.pressed_code[release_chk_idx]);
+            // ESP_LOGI(TAG, "key code %d, released.", s_key_state_previous.pressed_code[release_chk_idx]);
+            keypad_queue_push_event(s_key_state_previous.pressed_code[release_chk_idx], KEYPAD_EVT_RELEASE);
         }
         ++release_chk_idx;
     }
@@ -169,7 +171,8 @@ static void keypad_event_update(void)
         {
             /* Key code s_key_state_last.pressed_code[pressed_chk_idx] is not exist in previous state, new pressed. */
             /* Key pressed. */
-            ESP_LOGW(TAG, "Key %d, pressed.", s_key_state_last.pressed_code[pressed_chk_idx]);
+            // ESP_LOGI(TAG, "key code %d, pressed.", s_key_state_last.pressed_code[pressed_chk_idx]);
+            keypad_queue_push_event(s_key_state_last.pressed_code[pressed_chk_idx], KEYPAD_EVT_PRESS);
         }
         ++pressed_chk_idx;
     }

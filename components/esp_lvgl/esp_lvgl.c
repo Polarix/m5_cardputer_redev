@@ -263,5 +263,5 @@ void esp_lvgl_unlock(void)
 
 void esp_lvgl_key_read_cb(lv_indev_drv_t* indev_driver, lv_indev_data_t* data)
 {
-
+    esp_keypad_scan(indev_driver, data);
 }

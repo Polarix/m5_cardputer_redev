@@ -3,24 +3,13 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include "keypad_event.h"
 
 #define KEYPAD_REC_LEN_MAX      (6)
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-typedef struct _st_key_coord_
-{
-    uint8_t     row;
-    uint8_t     col;
-}key_coord_t;
-
-typedef enum _e_keypad_evt_
-{
-    KEYPAD_EVT_RELEASE,
-    KEYPAD_EVT_PRESS,
-}key_evt_t;
 
 typedef struct _st_key_state_
 {
