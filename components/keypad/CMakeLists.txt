@@ -3,7 +3,7 @@
 cmake_minimum_required(VERSION 3.16)
 
 idf_component_register(SRCS
-        keyboard.cpp
+        keypad_code.c keypad.c
         INCLUDE_DIRS "."
         PRIV_REQUIRES driver
 )
