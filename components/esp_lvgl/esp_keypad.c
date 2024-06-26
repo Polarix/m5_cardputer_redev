@@ -22,20 +22,19 @@ void esp_keypad_scan(lv_indev_drv_t* indev_driver, lv_indev_data_t* data)
     {
         keypad_scan();
     }
-    if(false == keypad_queue_is_empty())
+    else
     {
         int keycode;
         key_evt_t event;
-        keypad_queue_pop_event(&keycode, &event);
-        esp_keypad_convert(keycode, event, data);
-    }
-    if(keypad_queue_is_empty())
-    {
-        data->continue_reading = false;
-    }
-    else
-    {
-        data->continue_reading = true;
+        if(keypad_queue_pop_event(&keycode, &event))
+        {
+            esp_keypad_convert(keycode, event, data);
+            data->continue_reading = true;
+        }
+        else
+        {
+            data->continue_reading = false;
+        }
     }
 }
 
