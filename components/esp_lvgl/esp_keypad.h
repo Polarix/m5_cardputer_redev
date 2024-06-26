@@ -5,15 +5,45 @@
 #include <stdbool.h>
 #include "lvgl.h"
 
+#define KEY_CHAR_NULL       (0x00)
+#define KEY_CHAR_HOME       (0x02)
+#define KEY_CHAR_END        (0x03)
+#define KEY_CHAR_BS         (0x08)
+#define KEY_CHAR_TAB        (0x09)
+#define KEY_CHAR_LF         (0x0A)
+#define KEY_CHAR_ENTER      (KEY_CHAR_LF)
+#define KEY_CHAR_CR         (0x0D)
+#define KEY_CHAR_SHIFT_ON   (0x0E)
+#define KEY_CHAR_SHIFT_OFF  (0x0F)
+#define KEY_CHAR_UP         (0x11)
+#define KEY_CHAR_DOWN       (0x12)
+#define KEY_CHAR_LEFT       (0x13)
+#define KEY_CHAR_RIGHT      (0x14)
+#define KEY_CHAR_ESC        (0x1B)
+#define KEY_CHAR_SP         (0x20)
+#define KEY_CHAR_DEL        (0x7F)
+#define KEY_CHAR_FN         (0xA0)
+#define KEY_CHAR_CAPS       (0xA1)
+#define KEY_CHAR_CTRL       (0xA2)
+#define KEY_CHAR_ALT        (0xA3)
+#define KEY_CHAR_OPT        (0xA4)
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-typedef struct _st_lv_key_evt_
+typedef struct _st_lv_key_char_
 {
-    uint8_t             code;
-    lv_indev_state_t    state;
-}esp_key_evt_t;
+    char    shift_off;
+    char    shift_on;
+}lv_key_char_t;
+
+typedef struct _st_lv_key_map_
+{
+    lv_key_char_t   caps_off;
+    lv_key_char_t   caps_on;
+    char            fn_on;
+}lv_key_map_t;
 
 void esp_keypad_init(void);
 void esp_keypad_scan(lv_indev_drv_t* indev_driver, lv_indev_data_t* data);

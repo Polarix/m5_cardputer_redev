@@ -192,9 +192,9 @@ static void keypad_key_down_proc(int keycode)
             s_keypad_state.fn = true;
             break;
         }
-        case KEYPAD_CODE_CAPS_KEY:
+        case KEYPAD_CODE_SHIFT_KEY:
         {
-            s_keypad_state.caps = true;
+            s_keypad_state.shift = true;
             break;
         }
         case KEYPAD_CODE_CTRL_KEY:
@@ -229,9 +229,9 @@ static void keypad_key_up_proc(int keycode)
             s_keypad_state.fn = true;
             break;
         }
-        case KEYPAD_CODE_CAPS_KEY:
+        case KEYPAD_CODE_SHIFT_KEY:
         {
-            s_keypad_state.caps = true;
+            s_keypad_state.shift = true;
             break;
         }
         case KEYPAD_CODE_CTRL_KEY:
@@ -255,6 +255,11 @@ static void keypad_key_up_proc(int keycode)
         }
     }
     keypad_queue_push_event(keycode, KEYPAD_EVT_RELEASE);
+}
+
+bool keypad_shift_on(void)
+{
+    return s_keypad_state.shift;
 }
 
 bool keypad_fn_on(void)

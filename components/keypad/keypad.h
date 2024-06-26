@@ -8,7 +8,7 @@
 #define KEYPAD_REC_LEN_MAX      (6)
 
 #define KEYPAD_CODE_FN_KEY      (29)
-#define KEYPAD_CODE_CAPS_KEY    (30)
+#define KEYPAD_CODE_SHIFT_KEY    (30)
 #define KEYPAD_CODE_CTRL_KEY    (43)
 #define KEYPAD_CODE_OPT_KEY     (44)
 #define KEYPAD_CODE_ALT_KEY     (45)
@@ -38,6 +38,7 @@ void keypad_scan(void);
 bool keypad_has_pressed(void);
 void keypad_show_key_state(void);
 void keypad_dump_key_rec(kaypad_press_state_t* dest);
+bool keypad_shift_on(void);
 bool keypad_fn_on(void);
 bool keypad_caps_on(void);
 bool keypad_ctrl_on(void);
