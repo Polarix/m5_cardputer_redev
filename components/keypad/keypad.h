@@ -8,7 +8,7 @@
 #define KEYPAD_REC_LEN_MAX      (6)
 
 #define KEYPAD_CODE_FN_KEY      (29)
-#define KEYPAD_CODE_SHIFT_KEY    (30)
+#define KEYPAD_CODE_SHIFT_KEY   (30)
 #define KEYPAD_CODE_CTRL_KEY    (43)
 #define KEYPAD_CODE_OPT_KEY     (44)
 #define KEYPAD_CODE_ALT_KEY     (45)

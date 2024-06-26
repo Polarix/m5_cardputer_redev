@@ -226,27 +226,27 @@ static void keypad_key_up_proc(int keycode)
     {
         case KEYPAD_CODE_FN_KEY:
         {
-            s_keypad_state.fn = true;
+            s_keypad_state.fn = false;
             break;
         }
         case KEYPAD_CODE_SHIFT_KEY:
         {
-            s_keypad_state.shift = true;
+            s_keypad_state.shift = false;
             break;
         }
         case KEYPAD_CODE_CTRL_KEY:
         {
-            s_keypad_state.ctrl = true;
+            s_keypad_state.ctrl = false;
             break;
         }
         case KEYPAD_CODE_OPT_KEY:
         {
-            s_keypad_state.opt = true;
+            s_keypad_state.opt = false;
             break;
         }
         case KEYPAD_CODE_ALT_KEY:
         {
-            s_keypad_state.alt = true;
+            s_keypad_state.alt = false;
             break;
         }
         default:
