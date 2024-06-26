@@ -13,11 +13,14 @@ static uint8_t keypad_write_row(uint8_t row);
 static uint8_t keypad_read_col(uint8_t col);
 #endif
 static void keypad_event_update(void);
+static void keypad_key_down_proc(int keycode);
+static void keypad_key_up_proc(int keycode);
 
 static const gpio_num_t s_key_pad_col_pin[] = {GPIO_NUM_13, GPIO_NUM_15, GPIO_NUM_3, GPIO_NUM_4, GPIO_NUM_5, GPIO_NUM_6, GPIO_NUM_7};   /* input */
 static const gpio_num_t s_key_pad_row_pin[] = {GPIO_NUM_8, GPIO_NUM_9, GPIO_NUM_11}; /* Use 74HC138 for scan 8 row with 3 gpios. */     /* ouput */
-static keypad_state_t s_key_state_previous = {0x00, {0x00}};
-static keypad_state_t s_key_state_last = {0x00, {0x00}};
+static kaypad_press_state_t s_key_state_previous = {0x00, {0x00}};
+static kaypad_press_state_t s_key_state_last = {0x00, {0x00}};
+static keypad_state_t s_keypad_state;
 static const char* TAG = {"keypad_drv"};
 
 static void keypad_init_gpio(void)
@@ -72,8 +75,8 @@ void keypad_init(void)
 
 void keypad_scan(void)
 {
-    memcpy(&s_key_state_previous, &s_key_state_last, sizeof(keypad_state_t));
-    memset(&s_key_state_last, 0x00, sizeof(keypad_state_t));
+    memcpy(&s_key_state_previous, &s_key_state_last, sizeof(kaypad_press_state_t));
+    memset(&s_key_state_last, 0x00, sizeof(kaypad_press_state_t));
     for(int row_idx=0; row_idx<8; ++row_idx)
     {
         keypad_write_row(row_idx);
@@ -112,11 +115,11 @@ void keypad_show_key_state(void)
         s_key_state_last.pressed_code[0], s_key_state_last.pressed_code[1], s_key_state_last.pressed_code[2], s_key_state_last.pressed_code[3], s_key_state_last.pressed_code[4], s_key_state_last.pressed_code[5]);
 }
 
-void keypad_dump_key_rec(keypad_state_t* dest)
+void keypad_dump_key_rec(kaypad_press_state_t* dest)
 {
     if(dest)
     {
-        memcpy(dest, &s_key_state_last, sizeof(keypad_state_t));
+        memcpy(dest, &s_key_state_last, sizeof(kaypad_press_state_t));
     }
 }
 
@@ -144,7 +147,8 @@ static void keypad_event_update(void)
             /* Key code s_key_state_previous.pressed_code[release_chk_idx] is not exist in last state, released. */
             /* Key released. */
             // ESP_LOGI(TAG, "key code %d, released.", s_key_state_previous.pressed_code[release_chk_idx]);
-            keypad_queue_push_event(s_key_state_previous.pressed_code[release_chk_idx], KEYPAD_EVT_RELEASE);
+            // keypad_queue_push_event(s_key_state_previous.pressed_code[release_chk_idx], KEYPAD_EVT_RELEASE);
+            keypad_key_up_proc(s_key_state_previous.pressed_code[release_chk_idx]);
         }
         ++release_chk_idx;
     }
@@ -172,8 +176,108 @@ static void keypad_event_update(void)
             /* Key code s_key_state_last.pressed_code[pressed_chk_idx] is not exist in previous state, new pressed. */
             /* Key pressed. */
             // ESP_LOGI(TAG, "key code %d, pressed.", s_key_state_last.pressed_code[pressed_chk_idx]);
-            keypad_queue_push_event(s_key_state_last.pressed_code[pressed_chk_idx], KEYPAD_EVT_PRESS);
+            // keypad_queue_push_event(s_key_state_last.pressed_code[pressed_chk_idx], KEYPAD_EVT_PRESS);
+            keypad_key_down_proc(s_key_state_last.pressed_code[pressed_chk_idx]);
         }
         ++pressed_chk_idx;
     }
+}
+
+static void keypad_key_down_proc(int keycode)
+{
+    switch(keycode)
+    {
+        case KEYPAD_CODE_FN_KEY:
+        {
+            s_keypad_state.fn = true;
+            break;
+        }
+        case KEYPAD_CODE_CAPS_KEY:
+        {
+            s_keypad_state.caps = true;
+            break;
+        }
+        case KEYPAD_CODE_CTRL_KEY:
+        {
+            s_keypad_state.ctrl = true;
+            break;
+        }
+        case KEYPAD_CODE_OPT_KEY:
+        {
+            s_keypad_state.opt = true;
+            break;
+        }
+        case KEYPAD_CODE_ALT_KEY:
+        {
+            s_keypad_state.alt = true;
+            break;
+        }
+        default:
+        {
+            /* Do nothing. */
+        }
+    }
+    keypad_queue_push_event(keycode, KEYPAD_EVT_PRESS);
+}
+
+static void keypad_key_up_proc(int keycode)
+{
+    switch(keycode)
+    {
+        case KEYPAD_CODE_FN_KEY:
+        {
+            s_keypad_state.fn = true;
+            break;
+        }
+        case KEYPAD_CODE_CAPS_KEY:
+        {
+            s_keypad_state.caps = true;
+            break;
+        }
+        case KEYPAD_CODE_CTRL_KEY:
+        {
+            s_keypad_state.ctrl = true;
+            break;
+        }
+        case KEYPAD_CODE_OPT_KEY:
+        {
+            s_keypad_state.opt = true;
+            break;
+        }
+        case KEYPAD_CODE_ALT_KEY:
+        {
+            s_keypad_state.alt = true;
+            break;
+        }
+        default:
+        {
+            /* Do nothing. */
+        }
+    }
+    keypad_queue_push_event(keycode, KEYPAD_EVT_RELEASE);
+}
+
+bool keypad_fn_on(void)
+{
+    return s_keypad_state.fn;
+}
+
+bool keypad_caps_on(void)
+{
+    return s_keypad_state.caps;
+}
+
+bool keypad_ctrl_on(void)
+{
+    return s_keypad_state.ctrl;
+}
+
+bool keypad_opt_on(void)
+{
+    return s_keypad_state.opt;
+}
+
+bool keypad_alt_on(void)
+{
+    return s_keypad_state.alt;
 }
