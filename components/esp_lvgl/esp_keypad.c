@@ -25,9 +25,9 @@ static const lv_key_map_t s_lv_key_map[] =
     {/* 11 */ {'0',            ')'           }, {'-',            '_'           }, KEY_CHAR_NULL},
     {/* 12 */ {'-',            '_'           }, {'-',            '_'           }, KEY_CHAR_NULL},
     {/* 13 */ {'=',            '+'           }, {'=',            '+'           }, KEY_CHAR_NULL},
-    {/* 14 */ {KEY_CHAR_BS,    KEY_CHAR_NULL }, {KEY_CHAR_BS,    KEY_CHAR_NULL }, KEY_CHAR_DEL},
+    {/* 14 */ {KEY_CHAR_BS,    KEY_CHAR_BS   }, {KEY_CHAR_BS,    KEY_CHAR_BS   }, KEY_CHAR_DEL},
     /* Row 2 */
-    {/* 15 */ {KEY_CHAR_TAB,   KEY_CHAR_NULL }, {KEY_CHAR_TAB,   KEY_CHAR_NULL }, KEY_CHAR_NULL},
+    {/* 15 */ {KEY_CHAR_TAB,   KEY_CHAR_TAB  }, {KEY_CHAR_TAB,   KEY_CHAR_TAB  }, KEY_CHAR_NULL},
     {/* 16 */ {'q',            'Q'           }, {'Q',            'q'           }, KEY_CHAR_NULL},
     {/* 17 */ {'w',            'W'           }, {'W',            'w'           }, KEY_CHAR_NULL},
     {/* 18 */ {'e',            'E'           }, {'E',            'e'           }, KEY_CHAR_NULL},
@@ -43,7 +43,7 @@ static const lv_key_map_t s_lv_key_map[] =
     {/* 28 */ {'\\',           '|'           }, {'\\',           '|'           }, KEY_CHAR_NULL},
     /* Row 3 */
     {/* 29 */ {KEY_CHAR_FN,    KEY_CHAR_FN   }, {KEY_CHAR_FN,    KEY_CHAR_FN   }, KEY_CHAR_NULL},
-    {/* 30 */ {KEY_CHAR_CAPS,  KEY_CHAR_NULL }, {KEY_CHAR_CAPS,  KEY_CHAR_NULL }, KEY_CHAR_NULL},
+    {/* 30 */ {KEY_CHAR_CAPS,  KEY_CHAR_CAPS }, {KEY_CHAR_CAPS,  KEY_CHAR_CAPS }, KEY_CHAR_NULL},
     {/* 31 */ {'a',            'A'           }, {'A',            'a'           }, KEY_CHAR_NULL},
     {/* 32 */ {'s',            'S'           }, {'S',            's'           }, KEY_CHAR_NULL},
     {/* 33 */ {'d',            'D'           }, {'D',            'd'           }, KEY_CHAR_NULL},
@@ -57,8 +57,8 @@ static const lv_key_map_t s_lv_key_map[] =
     {/* 41 */ {'\'',           '"'           }, {'\'',           '"'           }, KEY_CHAR_NULL},
     {/* 42 */ {KEY_CHAR_ENTER, KEY_CHAR_ENTER}, {KEY_CHAR_ENTER, KEY_CHAR_ENTER}, KEY_CHAR_NULL},
     /* Row 4 */
-    {/* 43 */ {KEY_CHAR_CTRL,  KEY_CHAR_NULL }, {KEY_CHAR_CTRL,  KEY_CHAR_NULL }, KEY_CHAR_NULL},
-    {/* 44 */ {KEY_CHAR_OPT,   KEY_CHAR_NULL }, {KEY_CHAR_OPT,   KEY_CHAR_NULL }, KEY_CHAR_NULL},
+    {/* 43 */ {KEY_CHAR_CTRL,  KEY_CHAR_CTRL }, {KEY_CHAR_CTRL,  KEY_CHAR_CTRL }, KEY_CHAR_NULL},
+    {/* 44 */ {KEY_CHAR_OPT,   KEY_CHAR_OPT  }, {KEY_CHAR_OPT,   KEY_CHAR_OPT  }, KEY_CHAR_NULL},
     {/* 45 */ {KEY_CHAR_ALT,   KEY_CHAR_ALT  }, {KEY_CHAR_ALT,   KEY_CHAR_ALT  }, KEY_CHAR_NULL},
     {/* 46 */ {'z',            'Z'           }, {'Z',            'z'           }, KEY_CHAR_NULL},
     {/* 47 */ {'x',            'X'           }, {'X',            'x'           }, KEY_CHAR_NULL},
