@@ -5,9 +5,9 @@
 #include "freertos/task.h"
 #include "esp_lvgl.h"
 #include "startup_screen.h"
+#include "bat_volt.h"
 
 static const char* TAG = {"main"};
-
 void platform_init(void);
 
 extern "C" [[maybe_unused]] void app_main(void)
@@ -17,9 +17,15 @@ extern "C" [[maybe_unused]] void app_main(void)
     // ESP_LOGI(TAG, "SD card inited.");
     // sdcard_show_root();
     /* For init GUI. */
+    bat_volt_monitor_init();
+
     esp_lvgl_adapter_init();
     ESP_LOGI(TAG, "GUI Inited.");
     platform_init();
+    while(true)
+    {
+        vTaskDelay(pdMS_TO_TICKS(10));
+    }
 }
 
 
