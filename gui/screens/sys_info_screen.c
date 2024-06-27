@@ -13,6 +13,7 @@ static void update_info_timer_callback(lv_timer_t* timer);
 LV_FONT_DECLARE(SOURCEHANSANS_18PX_M);
 
 static lv_obj_t* s_screen_handle = NULL;
+static lv_obj_t* s_flash_label = NULL;
 static lv_obj_t* s_mem_label = NULL;
 static lv_obj_t* s_bat_volt_label = NULL;
 
@@ -29,16 +30,22 @@ void sys_info_screen_create(void)
         lv_obj_set_style_bg_color(s_screen_handle, lv_color_black(), LV_STATE_DEFAULT);
         lv_group_add_obj(lv_group_get_default(), s_screen_handle);
 
+        /* Flash info */
+        s_flash_label = lv_label_create(s_screen_handle);
+        lv_obj_set_size(s_flash_label, 200, LV_SIZE_CONTENT);
+        lv_obj_align(s_flash_label, LV_ALIGN_TOP_MID, 0, 10);
+        info_label_style_set(s_flash_label);
+
         /* Memory info. */
         s_mem_label = lv_label_create(s_screen_handle);
-        lv_obj_set_size(s_mem_label, 200, 25);
-        lv_obj_align(s_mem_label, LV_ALIGN_TOP_MID, 0, 10);
+        lv_obj_set_size(s_mem_label, 200, LV_SIZE_CONTENT);
+        lv_obj_align_to(s_mem_label, s_flash_label, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
         info_label_style_set(s_mem_label);
 
         /* Bat volt. */
         s_bat_volt_label = lv_label_create(s_screen_handle);
-        lv_obj_set_size(s_bat_volt_label, 200, 25);
-        lv_obj_align(s_bat_volt_label, LV_ALIGN_TOP_MID, 0, 45);
+        lv_obj_set_size(s_bat_volt_label, 200, LV_SIZE_CONTENT);
+        lv_obj_align_to(s_bat_volt_label, s_mem_label, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
         info_label_style_set(s_bat_volt_label);
 
         update_sys_info();
@@ -58,6 +65,7 @@ static void update_info_timer_callback(lv_timer_t* timer)
 {
     if(s_screen_handle)
     {
+        ESP_LOGI(TAG, "Info updating.");
         update_sys_info();
     }
     else
@@ -110,11 +118,13 @@ static void update_sys_info(void)
         ESP_LOGE(TAG, "Get flash size failed.");
         flash_size = 0;
     }
-    uint32_t mem_size = esp_get_minimum_free_heap_size();
+    lv_label_set_text_fmt(s_flash_label, "Flash: %luMB.", flash_size / 1024 / 1024);
 
-    lv_label_set_text_fmt(s_mem_label, "Flash: %luM bytes.\nRam: %lu bytes.", flash_size / 1024 / 1024, mem_size);
+    uint32_t mem_size = esp_get_minimum_free_heap_size();
+    lv_label_set_text_fmt(s_mem_label, "Ram: %lu bytes.", mem_size);
+    lv_obj_align_to(s_mem_label, s_flash_label, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
 
     uint32_t bat_volt_mv = (uint32_t)bat_volt_read_mv();
-
     lv_label_set_text_fmt(s_bat_volt_label, "Bat volt: %lu.%03luv.", bat_volt_mv/1000, bat_volt_mv%1000);
+    lv_obj_align_to(s_bat_volt_label, s_mem_label, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
 }
