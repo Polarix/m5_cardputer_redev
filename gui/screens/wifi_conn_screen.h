@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-void wifi_conn_screen_create(void);
+void wifi_conn_screen_create(const char* ssid);
 
 void wifi_conn_screen_load(void);
 
