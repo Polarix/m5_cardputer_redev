@@ -12,7 +12,7 @@ file(GLOB_RECURSE SCREENS_SRCS
 
 idf_component_register(
     SRCS ${RES_IMG_SRCS} ${RES_FONT_SRCS} ${SCREENS_SRCS}
-    PRIV_REQUIRES lvgl bat_volt spi_flash
+    PRIV_REQUIRES lvgl bat_volt spi_flash functions
     INCLUDE_DIRS "./screens"
 )
 
