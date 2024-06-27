@@ -6,6 +6,7 @@
 #include "esp_lvgl.h"
 #include "startup_screen.h"
 #include "bat_volt.h"
+#include "sd_card.h"
 
 static const char* TAG = {"main"};
 void platform_init(void);
@@ -13,8 +14,8 @@ void platform_init(void);
 extern "C" [[maybe_unused]] void app_main(void)
 {
     /* For init filesystem. */
-    // sdcard_mount();
-    // ESP_LOGI(TAG, "SD card inited.");
+    sdcard_mount();
+    ESP_LOGI(TAG, "SD card inited.");
     // sdcard_show_root();
     /* For init GUI. */
     bat_volt_monitor_init();
