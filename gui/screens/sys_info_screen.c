@@ -79,7 +79,7 @@ void sys_info_screen_load(void)
     if(s_screen_handle)
     {
         // lv_scr_load(s_screen_handle);
-        lv_scr_load_anim(s_screen_handle, LV_SCR_LOAD_ANIM_FADE_OUT, 500, 0, false);
+        lv_scr_load_anim(s_screen_handle, LV_SCR_LOAD_ANIM_FADE_OUT, 100, 0, false);
 
         lv_timer_create(update_info_timer_callback, 5000, NULL);
     }

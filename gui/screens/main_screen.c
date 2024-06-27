@@ -133,7 +133,7 @@ void main_screen_load(void)
     if(s_screen_handle)
     {
         // lv_scr_load(s_screen_handle);
-        lv_scr_load_anim(s_screen_handle, LV_SCR_LOAD_ANIM_FADE_OUT, 500, 0, false);
+        lv_scr_load_anim(s_screen_handle, LV_SCR_LOAD_ANIM_FADE_OUT, 100, 0, false);
     }
 }
 
@@ -220,8 +220,8 @@ static void on_roller_confirm(lv_event_t* event)
         }
         case 2:
         {
-            wifi_conn_screen_create();
-            wifi_conn_screen_load();
+            wifi_scan_screen_create();
+            wifi_scan_screen_load();
             break;
         }
         case 5:
