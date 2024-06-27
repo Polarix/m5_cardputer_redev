@@ -107,7 +107,7 @@ static void esp_keypad_convert(int keycode, key_evt_t event, lv_indev_data_t* da
     // ESP_LOGW(TAG, "Key %d, %s.", keycode, event?"pressed":"released");
     data->key = esp_keypad_get_keychar(keycode, keypad_caps_on(), keypad_shift_on(), keypad_fn_on());
     data->state = (KEYPAD_EVT_PRESS == event)?LV_INDEV_STATE_PRESSED:LV_INDEV_STATE_RELEASED;
-    ESP_LOGW(TAG, "LVGL key %d, %s.", (int)(data->key), event?"pressed":"released");
+    // ESP_LOGW(TAG, "LVGL key %d, %s.", (int)(data->key), event?"pressed":"released");
 }
 
 static uint32_t esp_keypad_get_keychar(int keycode, bool caps, bool shift, bool fn)
