@@ -61,7 +61,7 @@ static void wifi_scan_task(void *arg)
         wifi_scan_screen_set_item_count(ap_count);
         for (uint16_t i = 0; i < ap_count; i++)
         {
-            ESP_LOGI(TAG, "SSID: %s RSSI: %d", s_wifi_scan_recorder.rec[i].ssid, s_wifi_scan_recorder.rec[i].rssi);
+            // ESP_LOGI(TAG, "SSID: %s RSSI: %d", s_wifi_scan_recorder.rec[i].ssid, s_wifi_scan_recorder.rec[i].rssi);
             wifi_scan_screen_set_item(i, (char*)s_wifi_scan_recorder.rec[i].ssid, s_wifi_scan_recorder.rec[i].rssi, s_wifi_scan_recorder.rec[i].primary);
         }
         wifi_scan_screen_scan_done();

@@ -103,8 +103,8 @@ static void on_key_pressed(lv_event_t* event)
         uint32_t keycode = lv_event_get_key(event);
         if(LV_KEY_ENTER == keycode)
         {
-            ESP_LOGD(TAG, "SSID: %s.", s_wifi_ssid);
-            ESP_LOGD(TAG, "Password: %s.", lv_textarea_get_text(s_passwd_input));
+            ESP_LOGW(TAG, "SSID: %s.", s_wifi_ssid);
+            ESP_LOGW(TAG, "Password: %s.", lv_textarea_get_text(s_passwd_input));
         }
         else if(LV_KEY_ESC == keycode)
         {
