@@ -7,7 +7,6 @@
 
 static void on_screen_unloaded(lv_event_t* event);
 static void on_key_pressed(lv_event_t* event);
-static void on_selection_change(lv_event_t* event);
 static void on_select_proc(lv_event_t* event);
 static void on_refresh_timer(lv_timer_t* timer);
 
@@ -16,6 +15,7 @@ LV_FONT_DECLARE(UNIFONT_16PX);
 static lv_obj_t* s_screen_handle = NULL;
 static lv_obj_t* s_wifi_table = NULL;
 static lv_obj_t* s_timeout_bar = NULL;
+
 static const char* TAG = {"screen:wifi_scan"};
 
 void wifi_scan_screen_create(void)
@@ -122,22 +122,15 @@ static void on_key_pressed(lv_event_t* event)
         }
     }
 }
-#if 0
-static void on_selection_change(lv_event_t* event)
-{
-    lv_obj_t* table_obj = lv_event_get_target(event);
-    uint16_t col, row;
-    lv_table_get_selected_cell(table_obj, &row, &col);
-    ESP_LOGI(TAG, "Item %u selected.", row);
-    // DBG_LOG("Item %u selected.", row);
-}
-#endif
+
 static void on_select_proc(lv_event_t* event)
 {
     uint16_t col, row;
     lv_obj_t* table_obj = lv_event_get_target(event);
     lv_table_get_selected_cell(table_obj, &row, &col);
     ESP_LOGI(TAG, "Select %u confirmed.", row);
+    wifi_conn_screen_create(lv_table_get_cell_value(table_obj, row, 0));
+    wifi_conn_screen_load();
 }
 
 static void on_refresh_timer(lv_timer_t* timer)
