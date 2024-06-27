@@ -4,11 +4,8 @@
 #include <esp_log.h>
 #include <freertos/task.h>
 #include <nvs_flash.h>
-
-#include "gui.h"
-#include "wifi_list_screen.h"
-#include "wifi_info_screen.h"
-
+#include "wifi_scan_screen.h"
+#include "esp_lvgl.h"
 
 #define WIFI_SCAN_TASK_STACK_SIZE   (4 * 1024)   // 定义WIFI扫描任务的堆栈大小（字节）
 #define WIFI_SCAN_TASK_PRIORITY     2            // 定义WIFI扫描任务的优先级
@@ -17,28 +14,32 @@ static void wifi_scan_task(void *arg);
 static void wifi_scan_cleanup_recorder(void);
 static void wifi_scan_read_recorder(uint16_t ap_num);
 
-static const char *TAG = {"wifi_scan"};
+static const char* TAG = {"wifi_scan"};
 static struct
 {
     uint16_t    count;
     wifi_ap_record_t* rec;
-}s_wifi_scan_recorder = {0, nullptr};
+}s_wifi_scan_recorder = {0, NULL};
 
 void wifi_scan_init(void)
 {
+    nvs_flash_init(); // Enable this line if WIFI NVS Flash is enabled.
+    wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
+    esp_wifi_init(&cfg);
+    esp_wifi_set_mode(WIFI_MODE_STA);
+    esp_wifi_start();
+}
 
+void wifi_func_deinit(void)
+{
+    esp_wifi_stop();
+    esp_wifi_deinit();
 }
 
 static void wifi_scan_task(void *arg)
 {
     (void) arg;
     ESP_LOGI(TAG, "Wifi scan task start on CPU%u", xPortGetCoreID());
-
-    wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
-    nvs_flash_init(); // Enable this line if WIFI NVS Flash is enabled.
-    esp_wifi_init(&cfg);
-    esp_wifi_set_mode(WIFI_MODE_STA);
-    esp_wifi_start();
  
     wifi_scan_config_t scan_config = {
         .ssid = NULL,
@@ -47,7 +48,6 @@ static void wifi_scan_task(void *arg)
         .show_hidden = true,
         .scan_type = WIFI_SCAN_TYPE_ACTIVE,
     };
-
     esp_wifi_scan_start(&scan_config, true);
     esp_wifi_scan_stop();
  
@@ -57,20 +57,16 @@ static void wifi_scan_task(void *arg)
     if(ap_count)
     {
         wifi_scan_read_recorder(ap_count);
-        gui_lock();
-        // wifi_list_screen_clear();
-        wifi_list_screen_set_item_count(ap_count);
+        esp_lvgl_lock(-1);
+        wifi_scan_screen_set_item_count(ap_count);
         for (uint16_t i = 0; i < ap_count; i++)
         {
             ESP_LOGI(TAG, "SSID: %s RSSI: %d", s_wifi_scan_recorder.rec[i].ssid, s_wifi_scan_recorder.rec[i].rssi);
-            wifi_list_screen_set_item(i, (char*)s_wifi_scan_recorder.rec[i].ssid, s_wifi_scan_recorder.rec[i].rssi, s_wifi_scan_recorder.rec[i].primary);
+            wifi_scan_screen_set_item(i, (char*)s_wifi_scan_recorder.rec[i].ssid, s_wifi_scan_recorder.rec[i].rssi, s_wifi_scan_recorder.rec[i].primary);
         }
-        wifi_list_screen_show();
-        gui_unlock();
+        wifi_scan_screen_scan_done();
+        esp_lvgl_unlock();
     }
-    esp_wifi_stop();
-    esp_wifi_deinit();
-
     vTaskDelete(NULL);
 }
 
@@ -104,6 +100,6 @@ void wifi_scan_show_info(uint16_t ap_idx)
 {
     if(ap_idx < s_wifi_scan_recorder.count)
     {
-        wifi_info_screen_fill((char*)(s_wifi_scan_recorder.rec[ap_idx].ssid), s_wifi_scan_recorder.rec[ap_idx].rssi, s_wifi_scan_recorder.rec[ap_idx].primary);
+        // wifi_info_screen_fill((char*)(s_wifi_scan_recorder.rec[ap_idx].ssid), s_wifi_scan_recorder.rec[ap_idx].rssi, s_wifi_scan_recorder.rec[ap_idx].primary);
     }
 }
