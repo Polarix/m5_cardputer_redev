@@ -69,7 +69,8 @@ void wifi_scan_screen_create(void)
         lv_obj_set_style_bg_color(s_timeout_bar, lv_color_hex(0x003763), LV_STATE_DEFAULT);
         lv_obj_set_style_bg_opa(s_timeout_bar, LV_OPA_100, LV_STATE_DEFAULT);
         lv_obj_set_style_pad_all(s_timeout_bar, 2, LV_STATE_DEFAULT);
-        lv_obj_set_style_bg_color(s_timeout_bar, lv_color_hex(0x0776D0), LV_PART_INDICATOR);
+        // lv_obj_set_style_bg_color(s_timeout_bar, lv_color_hex(0x0776D0), LV_PART_INDICATOR);
+        lv_obj_set_style_bg_color(s_timeout_bar, lv_color_white(), LV_PART_INDICATOR);
         lv_obj_set_style_bg_opa(s_timeout_bar, LV_OPA_100, LV_PART_INDICATOR);
         lv_obj_set_style_anim_time(s_timeout_bar, 100, LV_STATE_DEFAULT);
         lv_bar_set_value(s_timeout_bar, 30, LV_ANIM_OFF);
