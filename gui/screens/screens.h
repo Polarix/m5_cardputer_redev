@@ -7,6 +7,7 @@
 #include "sys_info_screen.h"
 #include "fw_info_screen.h"
 #include "wifi_scan_screen.h"
+#include "file_screen.h"
 
 #ifdef __cplusplus
 extern "C" {

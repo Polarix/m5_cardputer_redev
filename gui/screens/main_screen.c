@@ -218,6 +218,12 @@ static void on_roller_confirm(lv_event_t* event)
             sys_info_screen_load();
             break;
         }
+        case 1:
+        {
+            file_screen_create();
+            file_screen_load();
+            break;
+        }
         case 2:
         {
             wifi_scan_screen_create();
