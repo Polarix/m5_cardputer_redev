@@ -44,6 +44,7 @@ bool keypad_caps_on(void);
 bool keypad_ctrl_on(void);
 bool keypad_opt_on(void);
 bool keypad_alt_on(void);
+void keypad_force_fn(bool set);
 
 #ifdef __cplusplus
 }

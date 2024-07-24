@@ -3,9 +3,11 @@
 #include "lvgl.h"
 #include "esp_err.h"
 #include "esp_log.h"
+#include "keypad.h"
 
 #define FILE_PATH_LEN_MAX       (512)
 
+static void on_screen_loaded(lv_event_t* event);
 static void on_screen_unloaded(lv_event_t* event);
 static void on_item_select(lv_event_t* event);
 static void on_key_pressed(lv_event_t* event);
@@ -31,6 +33,7 @@ void file_screen_create(void)
     if(s_screen_handle)
     {
         ESP_LOGD(TAG, "Create file screen.");
+        lv_obj_add_event_cb(s_screen_handle, on_screen_loaded, LV_EVENT_SCREEN_LOADED, NULL);
         lv_obj_add_event_cb(s_screen_handle, on_screen_unloaded, LV_EVENT_SCREEN_UNLOADED, NULL);
         lv_obj_set_style_bg_opa(s_screen_handle, LV_OPA_100, LV_STATE_DEFAULT);
         lv_obj_set_style_bg_color(s_screen_handle, lv_color_black(), LV_STATE_DEFAULT);
@@ -166,6 +169,11 @@ static void file_screen_show_dir(const char* path)
     }
 }
 
+static void on_screen_loaded(lv_event_t* event)
+{
+    keypad_force_fn(true);
+}
+
 static void on_screen_unloaded(lv_event_t* event)
 {
     if(s_screen_handle)
@@ -180,16 +188,26 @@ static void on_key_pressed(lv_event_t* event)
 {
     if(LV_EVENT_KEY == lv_event_get_code(event))
     {
-        if(LV_KEY_BACKSPACE == lv_event_get_key(event))
+        switch(lv_event_get_key(event))
         {
-            lv_fs_up(s_current_path_buf);
-            create_new_list();
-            file_screen_show_dir(s_current_path_buf);
-        }
-        else if(LV_KEY_ESC == lv_event_get_key(event))
-        {
-            main_screen_create();
-            main_screen_load();
+            case LV_KEY_BACKSPACE:
+            case LV_KEY_DEL:
+            {
+                lv_fs_up(s_current_path_buf);
+                create_new_list();
+                file_screen_show_dir(s_current_path_buf);
+                break;
+            }
+            case LV_KEY_ESC:
+            {
+                main_screen_create();
+                main_screen_load();
+                break;
+            }
+            default:
+            {
+                /* Unknown function, do nithing. */
+            }
         }
     }
 }

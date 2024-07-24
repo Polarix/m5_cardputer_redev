@@ -4,7 +4,9 @@
 #include "esp_err.h"
 #include "esp_log.h"
 #include "wifi_scan.h"
+#include "keypad.h"
 
+static void on_screen_loaded(lv_event_t* event);
 static void on_screen_unloaded(lv_event_t* event);
 static void on_key_pressed(lv_event_t* event);
 static void on_select_proc(lv_event_t* event);
@@ -23,6 +25,7 @@ void wifi_scan_screen_create(void)
     s_screen_handle = lv_obj_create(NULL);
     if(s_screen_handle)
     {
+        lv_obj_add_event_cb(s_screen_handle, on_screen_loaded, LV_EVENT_SCREEN_LOADED, NULL);
         lv_obj_add_event_cb(s_screen_handle, on_screen_unloaded, LV_EVENT_SCREEN_UNLOADED, NULL);
         lv_obj_set_style_bg_opa(s_screen_handle, LV_OPA_100, LV_STATE_DEFAULT);
         lv_obj_set_style_bg_color(s_screen_handle, lv_color_black(), LV_STATE_DEFAULT);
@@ -102,6 +105,11 @@ void wifi_scan_screen_load(void)
     }
 }
 
+static void on_screen_loaded(lv_event_t* event)
+{
+    keypad_force_fn(true);
+}
+
 static void on_screen_unloaded(lv_event_t* event)
 {
     if(s_screen_handle)
@@ -130,6 +138,7 @@ static void on_select_proc(lv_event_t* event)
     lv_obj_t* table_obj = lv_event_get_target(event);
     lv_table_get_selected_cell(table_obj, &row, &col);
     ESP_LOGI(TAG, "Select %u confirmed.", row);
+    keypad_force_fn(false);
     wifi_conn_screen_create(lv_table_get_cell_value(table_obj, row, 0));
     wifi_conn_screen_load();
 }

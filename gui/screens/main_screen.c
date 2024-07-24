@@ -11,7 +11,9 @@
 #include "lvgl.h"
 #include "esp_err.h"
 #include "esp_log.h"
+#include "keypad.h"
 
+static void on_screen_loaded(lv_event_t* event);
 static void on_screen_unloaded(lv_event_t* event);
 static void on_roller_mask_paint(lv_event_t* event);
 static void on_roller_select(lv_event_t* event);
@@ -50,6 +52,7 @@ void main_screen_create(void)
     s_screen_handle = lv_obj_create(NULL);
     if(s_screen_handle)
     {
+        lv_obj_add_event_cb(s_screen_handle, on_screen_loaded, LV_EVENT_SCREEN_LOADED, NULL);
         lv_obj_add_event_cb(s_screen_handle, on_screen_unloaded, LV_EVENT_SCREEN_UNLOADED, NULL);
         lv_obj_set_style_bg_opa(s_screen_handle, LV_OPA_100, LV_STATE_DEFAULT);
         lv_obj_set_style_bg_color(s_screen_handle, lv_color_black(), LV_STATE_DEFAULT);
@@ -137,6 +140,11 @@ void main_screen_load(void)
     }
 }
 
+static void on_screen_loaded(lv_event_t* event)
+{
+    keypad_force_fn(true);
+}
+
 static void on_screen_unloaded(lv_event_t* event)
 {
     if(s_screen_handle)
@@ -216,24 +224,28 @@ static void on_roller_confirm(lv_event_t* event)
         {
             sys_info_screen_create();
             sys_info_screen_load();
+            keypad_force_fn(false);
             break;
         }
         case 1:
         {
             file_screen_create();
             file_screen_load();
+            keypad_force_fn(false);
             break;
         }
         case 2:
         {
             wifi_scan_screen_create();
             wifi_scan_screen_load();
+            keypad_force_fn(false);
             break;
         }
         case 5:
         {
             fw_info_screen_create();
             fw_info_screen_load();
+            keypad_force_fn(false);
             break;
         }
         default:

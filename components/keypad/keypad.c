@@ -21,6 +21,7 @@ static const gpio_num_t s_key_pad_row_pin[] = {GPIO_NUM_8, GPIO_NUM_9, GPIO_NUM_
 static kaypad_press_state_t s_key_state_previous = {0x00, {0x00}};
 static kaypad_press_state_t s_key_state_last = {0x00, {0x00}};
 static keypad_state_t s_keypad_state;
+static keypad_state_t s_keypad_force_state;
 static const char* TAG = {"keypad_drv"};
 
 static void keypad_init_gpio(void)
@@ -189,7 +190,10 @@ static void keypad_key_down_proc(int keycode)
     {
         case KEYPAD_CODE_FN_KEY:
         {
-            s_keypad_state.fn = true;
+            if(false == s_keypad_force_state.fn)
+            {
+                s_keypad_state.fn = true;
+            }
             break;
         }
         case KEYPAD_CODE_SHIFT_KEY:
@@ -226,7 +230,10 @@ static void keypad_key_up_proc(int keycode)
     {
         case KEYPAD_CODE_FN_KEY:
         {
-            s_keypad_state.fn = false;
+            if(false == s_keypad_force_state.fn)
+            {
+                s_keypad_state.fn = false;
+            }
             break;
         }
         case KEYPAD_CODE_SHIFT_KEY:
@@ -285,4 +292,10 @@ bool keypad_opt_on(void)
 bool keypad_alt_on(void)
 {
     return s_keypad_state.alt;
+}
+
+void keypad_force_fn(bool set)
+{
+    s_keypad_force_state.fn = set; 
+    s_keypad_state.fn = set;
 }

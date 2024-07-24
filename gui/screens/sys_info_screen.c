@@ -3,7 +3,9 @@
 #include "lvgl.h"
 #include "esp_err.h"
 #include "esp_log.h"
+#include "keypad.h"
 
+static void on_screen_loaded(lv_event_t* event);
 static void on_screen_unloaded(lv_event_t* event);
 static void on_key_pressed(lv_event_t* event);
 static void info_label_style_set(lv_obj_t* textbox);
@@ -24,6 +26,7 @@ void sys_info_screen_create(void)
     s_screen_handle = lv_obj_create(NULL);
     if(s_screen_handle)
     {
+        lv_obj_add_event_cb(s_screen_handle, on_screen_loaded, LV_EVENT_SCREEN_LOADED, NULL);
         lv_obj_add_event_cb(s_screen_handle, on_screen_unloaded, LV_EVENT_SCREEN_UNLOADED, NULL);
         lv_obj_add_event_cb(s_screen_handle, on_key_pressed, LV_EVENT_KEY, NULL);
         lv_obj_set_style_bg_opa(s_screen_handle, LV_OPA_100, LV_STATE_DEFAULT);
@@ -83,6 +86,11 @@ void sys_info_screen_load(void)
 
         lv_timer_create(update_info_timer_callback, 5000, NULL);
     }
+}
+
+static void on_screen_loaded(lv_event_t* event)
+{
+    keypad_force_fn(true);
 }
 
 static void on_screen_unloaded(lv_event_t* event)
